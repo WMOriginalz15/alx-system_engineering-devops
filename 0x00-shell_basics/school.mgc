@@ -1,4 +1,4 @@
 #!/bin/bash
-0 string SCHOOL School data
-!:mime School
+:0 string HAVARD Havard data
+!:mime Havard
 file -C -m school.mgc
