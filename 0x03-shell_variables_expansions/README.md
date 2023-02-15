@@ -1,1 +1,1 @@
-aliass
+shell, alias
