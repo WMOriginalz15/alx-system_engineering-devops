@@ -1,12 +1,10 @@
 #!/usr/bin/python3
-"""
-Function to count words in all hot posts of a given Reddit subreddit.
-"""
+
 import requests
 
 
 def count_words(subreddit, word_list, after=None, counts={}):
-    if not word_list or word_list == [] or not subreddit:
+    if not word_list or not subreddit:
         return
 
     url = f"https://www.reddit.com/r/{subreddit}/hot.json"
@@ -22,18 +20,26 @@ def count_words(subreddit, word_list, after=None, counts={}):
         return
 
     data = response.json()
-    children = data["data"]["children"]
+    children = data.get("data", {}).get("children", [])
 
     for post in children:
         title = post["data"]["title"].lower()
         for word in word_list:
-            if word.lower() in title:
-                counts[word] = counts.get(word, 0) + title.count(word.lower())
+            word_lower = word.lower()
+            if word_lower in title:
+                counts[word] = counts.get(word, 0) + title.count(word_lower)
 
-    after = data["data"]["after"]
+    after = data["data"].get("after")
     if after:
         count_words(subreddit, word_list, after, counts)
     else:
         sorted_counts = sorted(counts.items(), key=lambda x: (-x[1], x[0].lower()))
         for word, count in sorted_counts:
             print(f"{word.lower()}: {count}")
+
+
+if __name__ == "__main__":
+    # Example usage
+    subreddit_name = "python"  # Replace with the subreddit you want to query
+    words_to_count = ["python", "tutorial", "guide"]  # Replace with words you're interested in
+    count_words(subreddit_name, words_to_count)
