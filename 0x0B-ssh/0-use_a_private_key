@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Define the server address
+SERVER="your_server_address"
+
+# Use ssh with single-character flags to connect to the server
+ssh -i ~/.ssh/school ubuntu@$SERVER
