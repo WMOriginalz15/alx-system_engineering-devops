@@ -1,0 +1,34 @@
+server {
+    listen 80;
+
+    # Use IP of server as domain name
+    server_name 54.160.81.21;
+
+    # Customize HTTP response header
+    add_header X-Served-By 230797-web-01;
+
+    # Serve /airbnb-onepage/ route, proxy to port 5000
+    location /airbnb-onepage/ {
+        proxy_pass http://127.0.0.1:5000/airbnb-onepage/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # Serve /airbnb-dynamic/number_odd_or_even/ route, proxy to port 5001
+    location /airbnb-dynamic/number_odd_or_even/ {
+        proxy_pass http://127.0.0.1:5001/number_odd_or_even/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # Custom error page configuration
+    error_page 404 /404.html;
+    location = /404.html {
+        root /var/www/html;
+        internal;
+    }
+}
